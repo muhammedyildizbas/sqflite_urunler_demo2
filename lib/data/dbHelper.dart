@@ -27,14 +27,27 @@ class DbHelper{
   FutureOr<void> createDb(Database db, int version) async {
     await db.execute("Create table products(id integer primary key , name text , description text , unitPrice integer)"); // execute oluştur
   }
-  Future<List> getProducts() async { // veri tabanından product listesini getiriyoruz
+  Future<List<Product>> getProducts() async { // veri tabanından product listesini getiriyoruz
     Database db = await this.db;
     var result = await db.query("products");
-    return result;
+  return List.generate(result.length, (i) { //product dosyasında bulunan result objesi için index değerine göre sürekli listeyi gezer eklenir ve yeni ürün oluşturur.
+    return Product.fromObject(result[i]);
+    });
   }
   Future<int> instert(Product product) async{
     Database db = await this.db;
     var result = await db.insert("products", product.toMap());  // veri tabanı işlemlerinde Map değerleri istenir. Örneğin ürün ismini uygulamada nereye yazacağım vd. bilgileri nereye yazacağım gibi işlemler için product.dart da her yerden erişilebilmesi için toMap() fonksiyonu oluşturuldu.
 
   }
+  Future<int> delete(int id) async{ // silme işlemi
+    Database db = await this.db;
+    var result = await db.rawDelete("delete from products where id= $id"); // $ bu sembol + işareti ile aynı anlamı temsil etmektedir.
+    return result;
+  }
+  Future<int> update(Product product) async{ // update işlemi
+    Database db = await this.db;
+    var result = await db.update("products",product.toMap(), where: "id=?", whereArgs: /* where Args burada istediği listeyi veriyoruz = */ [product.id]);
+    return result;
+   }
+
 }
