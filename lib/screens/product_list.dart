@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_urunler_demo2/data/dbHelper.dart';
 import 'package:sqflite_urunler_demo2/models/product.dart';
+import 'package:sqflite_urunler_demo2/screens/product_add.dart';
 
 class ProductList extends StatefulWidget {
   @override
@@ -17,11 +18,7 @@ class _ProductListState extends State {
   @override
   void initState() {
     // sayfanın açılırken bu sayfada çalışan kodu başlat
-    var productsFuture = dbHelper.getProducts();
-    productsFuture.then((data) {
-      this.products =
-          data; // sayfa da ilk başda boş bir ekran gelir sonra veriler gelmeye başlar
-    });
+   getProducts();
   }
 
   @override
@@ -31,6 +28,11 @@ class _ProductListState extends State {
         title: Text("Ürün Listesi"),
       ),
       body: buildProductList(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){goToProductAdd();},
+        child: Icon(Icons.add),
+        tooltip: "Yeni Ürün Ekle",
+      ),
     );
   }
 
@@ -52,5 +54,21 @@ class _ProductListState extends State {
             ),
           );
         });
+  }
+
+  void goToProductAdd() async {
+    bool result= await Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductAdd()));
+    if(result !=null){
+      if(result){
+        getProducts();
+      }
+    }
+  }
+  void getProducts() async{
+    var productsFuture = dbHelper.getProducts();
+    productsFuture.then((data){
+      this.products = data;
+      productCount = data.length;
+    });
   }
 }

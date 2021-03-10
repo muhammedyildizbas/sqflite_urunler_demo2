@@ -4,8 +4,8 @@ class Product {
   String description;
   double unitPrice;
 
-  Product({ this.name, this.description, this.unitPrice});
-  Product.withId({this.id, this.name, this.description, this.unitPrice});
+  Product({this.name, this.description, this.unitPrice});
+  Product.withId({this.id,this.name,this.description,this.unitPrice});
 
   Map<String,dynamic> toMap(){ 
     var map= Map<String, dynamic>();
@@ -15,15 +15,15 @@ class Product {
     if(id!=null){
       map["id"]=id;
 
-
     }
+    return map;
   }
   Product.fromObject(dynamic o ){
     this.id = int.tryParse(o["id"]);
     this.id = o ["id"];
     this.name = o["name"];
     this.description = o["description"];
-    this.unitPrice = double.tryParse(o["unitPrice"]);
+    this.unitPrice = double.tryParse(o["unitPrice"].toString());
 
   }
 
