@@ -45,7 +45,7 @@ class _ProductDetailState extends State {
                 child: Text("Sil"),
               ),
               PopupMenuItem<Options>(
-                value: Options.delete,
+                value: Options.update,
                 child: Text("Güncelle"),
               ),
             ],
